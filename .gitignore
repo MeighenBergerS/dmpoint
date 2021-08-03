@@ -1,0 +1,10 @@
+.*.sw*
+
+*.json
+
+fd.log
+
+*.pyc
+.ipynb_checkpoints
+
+venv3
