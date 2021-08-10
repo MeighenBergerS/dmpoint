@@ -7,4 +7,6 @@ fd.log
 *.pyc
 .ipynb_checkpoints
 
+*.p
+
 venv3
