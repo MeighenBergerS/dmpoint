@@ -4,4 +4,6 @@ numpy
 scipy
 tqdm
 iminuit
-scikit-learn 
+scikit-learn
+ephem
+imageio
