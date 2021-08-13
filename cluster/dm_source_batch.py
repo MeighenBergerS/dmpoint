@@ -37,8 +37,8 @@ def main(population):
     minimal_resolution = 0.2
     ra_grid = np.arange(0., 360., minimal_resolution)
     decl_grid = np.arange(0., 10., minimal_resolution)
-    flux_scan = np.logspace(-24, -14, 51)  # Fluxes to test
-    ide_scan = [0, 10, 20, 30]  # energy ids to test
+    flux_scan = np.logspace(-24, -13, 56)  # Fluxes to test
+    ide_scan = [0, 5, 10, 15, 20, 25, 30, 35, 39]  # energy ids to test
     signal_test = 100  # Number of signal samples to use
     logging.debug("Finished the constants")
     logging.debug("-----------------------------------------------------------")
