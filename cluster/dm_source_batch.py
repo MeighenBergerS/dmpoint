@@ -18,7 +18,7 @@ def main(population):
     storage_loc = '/home/ga78fed/output/'  # Needs to be changed by the user
     file_tree = '/home/ga78fed/projects/dmpoint/'  # Point to the module
     logging.basicConfig(
-        filename='/home/ga78fed/output/prob.log', level=logging.DEBUG
+        filename='/home/ga78fed/output/dmpoint.log', level=logging.DEBUG
     )
     logging.debug("Welcome to dmpoint! We'll be testing some dm today")
     # Parameters
