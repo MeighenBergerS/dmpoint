@@ -2,3 +2,14 @@
 *
 # Except this file
 !.gitignore
+# Don't ignore the weights
+!simulated_data_bkgrd_store_benchmark.pkl
+# Include the test data file for ease of use
+!test_set.pkl
+# Don't ignore the effective areas and smearing
+!icecube_10year_ps/
+!icecube_10year_ps/irfs
+!icecube_10year_ps/irfs/*
+# Don't the uptime
+!icecube_10year_ps/uptime
+!icecube_10year_ps/uptime/*
