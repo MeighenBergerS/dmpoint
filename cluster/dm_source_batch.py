@@ -13,7 +13,14 @@ from scipy.interpolate import UnivariateSpline
 import time
 import logging
 
-def main(population):
+def main(job_id):
+    """ The submission function
+
+    Parameters
+    ----------
+    job_id : int
+        The current job id
+    """
     start = time.time()
     storage_loc = '/home/ga78fed/output/'  # Needs to be changed by the user
     file_tree = '/home/ga78fed/projects/dmpoint/'  # Point to the module
@@ -28,6 +35,13 @@ def main(population):
     logging.debug("-----------------------------------------------------------")
     logging.debug("Setting constants")
     # Constants
+    # Parsing the job id
+    parsed_val = divmod(job_id, 10)
+    population = parsed_val[0] + 1
+    ide_val = parsed_val[1]
+    # Printing to out file
+    print("Population for this run %d" % population)
+    print("Energy id for this run %d" % ide_val)
     seconds = 60.
     minutes = 60.
     days = seconds * minutes * 24
@@ -38,7 +52,8 @@ def main(population):
     ra_grid = np.arange(0., 360., minimal_resolution)
     decl_grid = np.arange(0., 10., minimal_resolution)
     flux_scan = np.logspace(-24, -13, 56)  # Fluxes to test
-    ide_scan = [0, 5, 10, 15, 20, 25, 30, 35, 39]  # energy ids to test
+    ide_scan = [0, 5, 10, 15, 18, 20, 25, 30, 35, 39]  # energy ids to test
+    ide = ide_scan[ide_val]
     signal_test = 100  # Number of signal samples to use
     logging.debug("Finished the constants")
     logging.debug("-----------------------------------------------------------")
@@ -145,24 +160,21 @@ def main(population):
     logging.debug("Starting the calculation loop")
     cl_lim_store = []
     pop = population
-    for ide in tqdm(ide_scan):
-        cl_tmp = []
-        for flux in flux_scan:
-            signal_densities = np.array([
-                signal_density_constructor(
-                    ide, pop, flux, seed,
-                    m_egrid, m_ewidths, eff_dic,
-                    uptime_tot_dic, smearing_dic, weights,
-                    decl_grid, ra_grid, angle_uncer=1.
-                ) for seed in range(signal_test)
-            ])
-            cl_lim = (
-                improved_comparison_signal(
-                    signal_densities, q_bkgrd, dens_bkgrd
-                )
+    for flux in tqdm(flux_scan):
+        signal_densities = np.array([
+            signal_density_constructor(
+                ide, pop, flux, seed,
+                m_egrid, m_ewidths, eff_dic,
+                uptime_tot_dic, smearing_dic, weights,
+                decl_grid, ra_grid, angle_uncer=1.
+            ) for seed in range(signal_test)
+        ])
+        cl_lim = (
+            improved_comparison_signal(
+                signal_densities, q_bkgrd, dens_bkgrd
             )
-            cl_tmp.append(cl_lim)
-        cl_lim_store.append(cl_tmp)
+        )
+        cl_lim_store.append(cl_lim)
     logging.debug("Finished the calculation loop")
     end = time.time()
     print("Execution time:")
@@ -171,7 +183,8 @@ def main(population):
     logging.debug("-----------------------------------------------------------")
     pickle.dump(
         cl_lim_store,
-        open(storage_loc + "results/cl_lim_res_pop_%d.p" %population, "wb" )
+        open(storage_loc +
+             "results/cl_lim_res_pop_%d_ide_%d.p" % (population, ide), "wb" )
     )
     # Storing
     logging.debug("Dumping values")
