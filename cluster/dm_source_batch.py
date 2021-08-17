@@ -12,6 +12,7 @@ from tqdm import tqdm
 from scipy.interpolate import UnivariateSpline
 import time
 import logging
+from scipy.stats import norm
 
 def main(job_id):
     """ The submission function
@@ -148,7 +149,7 @@ def main(job_id):
     logging.debug("-----------------------------------------------------------")
     logging.debug("Loading the background")
     bkgrd_data = pickle.load(
-        open(file_tree + 'data/test_set.pkl', "rb")
+        open(file_tree + 'data/test_set_v3.pkl', "rb")
     )
     q_bkgrd = bkgrd_data[0]
     dens_bkgrd = bkgrd_data[1]
@@ -472,48 +473,52 @@ def signal_density_constructor(energy_id, number_of_sources,
         for set_events in events
     ])
     density_grid = np.zeros((len(decl_grid), len(ra_grid)))
-    # Binning
+    box_to_check = np.arange(-5., 5., 0.2)
+    ll  = int(len(box_to_check) / 2)
+    distance_grid_x, distance_grid_y = np.meshgrid(box_to_check, box_to_check)
+    distance_grid = np.sqrt(
+            (distance_grid_x)**2. +
+            (distance_grid_y)**2
+    )
     for set_id in range(number_of_sources):
         for event in reweighted_events[set_id]:
-            # Finding grid points to add to
             # RA
-            single_ra = False
-            idra_low = (
-                np.abs(ra_grid - (ra_sample[set_id] - angle_uncer))
-            ).argmin()
-            idra_high = (
-                np.abs(ra_grid - (ra_sample[set_id] + angle_uncer))
-            ).argmin()
-            if idra_high == idra_low:
-                single_ra = True
+            idra = (np.abs(ra_grid - (ra_sample[set_id]))).argmin()
             # Declination
-            single_dec = False
-            iddec_low = (
-                np.abs(decl_grid - (declination_sample[set_id] - angle_uncer))
-            ).argmin()
-            iddec_high = (
-                np.abs(decl_grid - (declination_sample[set_id] + angle_uncer))
-            ).argmin()
-            if iddec_low == iddec_high:
-                single_dec = True
-            # Binning
-            if (not single_ra) and (not single_dec):
-                density_grid[iddec_low:iddec_high, idra_low:idra_high] += (
-                    event
-                )
-            elif single_ra and (not single_dec):
-                density_grid[iddec_low:iddec_high, idra_low] += (
-                    event
-                )
-            elif (not single_ra) and single_dec:
-                density_grid[iddec_low, idra_low:idra_high] += (
-                    event
-                )
-            else:
-                density_grid[iddec_low, idra_low] += (
-                    event
-                )
-    return density_grid
+            iddec = (
+                (np.abs(decl_grid - (declination_sample[set_id]))).argmin()
+            )
+            # Fixing lower bounds
+            lb_dec = iddec - ll
+            lb_dec_diff = 0
+            if lb_dec < 0:
+                lb_dec_diff = np.abs(lb_dec)
+                lb_dec = 0
+            lb_ra = idra - ll
+            lb_ra_diff = 0
+            if lb_ra < 0:
+                lb_ra_diff = np.abs(lb_ra)
+                lb_ra = 0
+            # Fixing upper bounds
+            up_dec = iddec + ll
+            up_dec_diff = 0
+            if up_dec > len(decl_grid):
+                up_dec_diff = up_dec - len(decl_grid)
+                up_dec = len(decl_grid)
+            up_ra = idra + ll
+            up_ra_diff = 0
+            if up_ra > len(ra_grid):
+                up_ra_diff = up_ra - len(ra_grid)
+                up_ra = len(ra_grid)
+            distance_weights = norm.pdf(
+                distance_grid[lb_dec_diff:2*ll-up_dec_diff,
+                            lb_ra_diff:2*ll-up_ra_diff],
+                scale=angle_uncer
+            )
+            density_grid[lb_dec:up_dec, lb_ra:up_ra] += (
+                (distance_weights * event)
+            )
+    return np.flip(density_grid, axis=0)
 
 def improved_comparison_signal(signals, q_bkgrd, bkgrd_density):
     """ Calculates the confidence limit for the signals
