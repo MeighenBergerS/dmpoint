@@ -6,6 +6,7 @@
 !simulated_data_bkgrd_store_benchmark.pkl
 # Include the test data file for ease of use
 !test_set.pkl
+!test_set_v3.pkl
 # Don't ignore the effective areas and smearing
 !icecube_10year_ps/
 !icecube_10year_ps/irfs

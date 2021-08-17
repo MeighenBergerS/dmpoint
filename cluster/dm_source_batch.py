@@ -37,12 +37,15 @@ def main(job_id):
     logging.debug("Setting constants")
     # Constants
     # Parsing the job id
-    parsed_val = divmod(job_id, 10)
+    parsed_val = divmod(job_id, 560)
     population = parsed_val[0] + 1
-    ide_val = parsed_val[1]
+    parsed_val_2 = divmod(parsed_val[1], 56)
+    ide_val = parsed_val_2[0]
+    idf_val = parsed_val_2[1]
     # Printing to out file
     print("Population for this run %d" % population)
     print("Energy id for this run %d" % ide_val)
+    print("Flux id for this run %d" % idf_val)
     seconds = 60.
     minutes = 60.
     days = seconds * minutes * 24
@@ -159,23 +162,21 @@ def main(job_id):
     logging.debug("-----------------------------------------------------------")
     logging.debug("-----------------------------------------------------------")
     logging.debug("Starting the calculation loop")
-    cl_lim_store = []
     pop = population
-    for flux in tqdm(flux_scan):
-        signal_densities = np.array([
-            signal_density_constructor(
-                ide, pop, flux, seed,
-                m_egrid, m_ewidths, eff_dic,
-                uptime_tot_dic, smearing_dic, weights,
-                decl_grid, ra_grid, angle_uncer=1.
-            ) for seed in range(signal_test)
-        ])
-        cl_lim = (
-            improved_comparison_signal(
-                signal_densities, q_bkgrd, dens_bkgrd
-            )
+    flux = flux_scan[idf_val]
+    signal_densities = np.array([
+        signal_density_constructor(
+            ide, pop, flux, seed,
+            m_egrid, m_ewidths, eff_dic,
+            uptime_tot_dic, smearing_dic, weights,
+            decl_grid, ra_grid, angle_uncer=1.
+        ) for seed in range(signal_test)
+    ])
+    cl_lim = (
+        improved_comparison_signal(
+            signal_densities, q_bkgrd, dens_bkgrd
         )
-        cl_lim_store.append(cl_lim)
+    )
     logging.debug("Finished the calculation loop")
     end = time.time()
     print("Execution time:")
@@ -183,9 +184,11 @@ def main(job_id):
     logging.debug("-----------------------------------------------------------")
     logging.debug("-----------------------------------------------------------")
     pickle.dump(
-        cl_lim_store,
+        cl_lim,
         open(storage_loc +
-             "results/cl_lim_res_pop_%d_ide_%d.p" % (population, ide), "wb" )
+             "results/cl_lim_res_pop_%d_ide_%d_idf_%d.p" % (
+                 population, ide, idf_val
+                ), "wb" )
     )
     # Storing
     logging.debug("Dumping values")
