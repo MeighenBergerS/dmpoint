@@ -37,9 +37,9 @@ def main(job_id):
     logging.debug("Setting constants")
     # Constants
     # Parsing the job id
-    parsed_val = divmod(job_id+24000, 250)
+    parsed_val = divmod(job_id, 1000)
     population = parsed_val[0] + 1
-    parsed_val_2 = divmod(parsed_val[1], 25)
+    parsed_val_2 = divmod(parsed_val[1], 100)
     ide_val = parsed_val_2[0]
     idf_val = parsed_val_2[1]
     # Printing to out file
@@ -55,7 +55,7 @@ def main(job_id):
     minimal_resolution = 0.2
     ra_grid = np.arange(0., 360., minimal_resolution)
     decl_grid = np.arange(0., 10., minimal_resolution)
-    flux_scan = np.logspace(-24, -13, 25)  # Fluxes to test
+    flux_scan = np.logspace(-40, -10, 100)  # Fluxes to test
     ide_scan = [0, 5, 10, 15, 18, 20, 25, 30, 35, 39]  # energy ids to test
     ide = ide_scan[ide_val]
     signal_test = 100  # Number of signal samples to use
