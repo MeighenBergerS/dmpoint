@@ -37,7 +37,7 @@ def main(job_id):
     logging.debug("Setting constants")
     # Constants
     # Parsing the job id
-    parsed_val = divmod(job_id + 999000, 1000)
+    parsed_val = divmod(job_id, 1000)
     population = parsed_val[0] + 1
     parsed_val_2 = divmod(parsed_val[1], 100)
     ide_val = parsed_val_2[0]
@@ -145,9 +145,10 @@ def main(job_id):
     logging.debug("Finished loading the smearing matrices")
     logging.debug("-----------------------------------------------------------")
     logging.debug("Loading the event weights")
-    weights = weight_constructor(
-        file_tree + 'data/simulated_data_bkgrd_store_benchmark.pkl'
-    )
+    # weights = weight_constructor(
+    #     file_tree + 'data/simulated_data_bkgrd_store_benchmark.pkl'
+    # )
+    weights = pickle.load(open("..\\data\\weights.pkl", "rb"))
     logging.debug("Finished loading the event weights")
     logging.debug("-----------------------------------------------------------")
     logging.debug("Loading the background")

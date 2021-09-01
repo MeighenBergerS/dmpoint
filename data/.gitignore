@@ -3,7 +3,7 @@
 # Except this file
 !.gitignore
 # Don't ignore the weights
-!simulated_data_bkgrd_store_benchmark.pkl
+!weights.pkl
 # Include the test data file for ease of use
 !test_set.pkl
 !test_set_v3.pkl
@@ -11,6 +11,11 @@
 !icecube_10year_ps/
 !icecube_10year_ps/irfs
 !icecube_10year_ps/irfs/*
-# Don't the uptime
+# Don't ignore the uptime
 !icecube_10year_ps/uptime
 !icecube_10year_ps/uptime/*
+# Don't ignore comparison data
+!ANTARES_Limits.txt
+!IceCube_Limits.txt
+!Thermal_Relic.txt
+!Unitarity_Bound.txt
