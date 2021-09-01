@@ -6,7 +6,10 @@ Authors:
 
 ## Table of contents
 
-[[_TOC_]]
+1. [Introduction](##Introduction)
+2. [Data](##Data)
+3. [Guide](##Guide)
+4. [Citation](##Citation)
 
 ## Introduction
 
@@ -20,7 +23,7 @@ data release:
 IceCube Collaboration (2021): All-sky point-source IceCube data: years 2008-2018. Dataset.
 DOI: <http://doi.org/DOI:10.21234/sxvs-mt83>
 
-## Short guide
+## Guide
 
 The repository includes all scripts required to generate the plots from the
 publication, except the atmospheric shower one. For that please use
@@ -36,6 +39,6 @@ The jupyter notebooks should guide through the required steps to analyze the dat
 
 The cluster folder contains scripts to run batches on a cluster using slurm.
 
-## Cite our work
+## Citation
 
 Please cite ... when using this code.
