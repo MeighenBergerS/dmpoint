@@ -6,16 +6,16 @@ Authors:
 
 ## Table of contents
 
-1. [Introduction](##Introduction)
-2. [Data](##Data)
-3. [Guide](##Guide)
-4. [Citation](##Citation)
+1. [Introduction](#Introduction)
+2. [Data](#Data)
+3. [Guide](#Guide)
+4. [Citation](#Citation)
 
-## Introduction
+## Introduction <a name="Introduction"></a>
 
 Project to check if we can constrain dm using point source approaches
 
-## Data
+## Data <a name="Data"></a>
 
 This code was designed to use data from the public IceCube 10 year point source
 data release:
@@ -23,7 +23,7 @@ data release:
 IceCube Collaboration (2021): All-sky point-source IceCube data: years 2008-2018. Dataset.
 DOI: <http://doi.org/DOI:10.21234/sxvs-mt83>
 
-## Guide
+## Guide <a name="Guide"></a>
 
 The repository includes all scripts required to generate the plots from the
 publication, except the atmospheric shower one. For that please use
@@ -39,6 +39,6 @@ The jupyter notebooks should guide through the required steps to analyze the dat
 
 The cluster folder contains scripts to run batches on a cluster using slurm.
 
-## Citation
+## Citation <a name="Citation"></a>
 
 Please cite ... when using this code.
