@@ -41,4 +41,4 @@ The cluster folder contains scripts to run batches on a cluster using slurm.
 
 ## Citation <a name="Citation"></a>
 
-Please cite ... when using this code.
+Please cite [arXiv:2109.07885](https://arxiv.org/abs/2109.07885) when using this code.
